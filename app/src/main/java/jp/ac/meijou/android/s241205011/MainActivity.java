@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private PrefDataStore prefDataStore;
     private int count = 0; // count をフィールド変数として宣言し、初期値を0に設定
+    private float result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,33 +30,37 @@ public class MainActivity extends AppCompatActivity {
         });
         prefDataStore = PrefDataStore.getInstance(this);
         String[] hello = {"＊","/","＋","-"};
-        binding.button.setOnClickListener(view ->{
+        binding.button1.setOnClickListener(view ->{
             int number1 = Integer.parseInt(binding.editText1.getText().toString());
             int number2 = Integer.parseInt(binding.editText2.getText().toString());
-            float result;
-            binding.textbox1.setText(hello[count % hello.length]); // 配列の長さを直接使用
-            if(count == 0){
-                result = number1 * number2;
-                binding.textbox2.setText(String.valueOf(result));
+            binding.textbox1.setText("*");
+            result = number1 * number2;
+            binding.textbox2.setText(String.valueOf(result));
+        });
+        binding.button2.setOnClickListener(view ->{
+            int number1 = Integer.parseInt(binding.editText1.getText().toString());
+            int number2 = Integer.parseInt(binding.editText2.getText().toString());
+            binding.textbox1.setText("/");
+            if (number2 == 0) {
+                binding.textbox2.setText("エラー");
+                return;
             }
-            else if(count == 1){
-                if (number1 == 0) {
-                    binding.textbox2.setText("エラー");
-                }else{result = number2 / number1;
-                    binding.textbox2.setText(String.valueOf(result));
-                }
-            }
-            else if(count == 2){
-                result = number1 + number2;
-                binding.textbox2.setText(String.valueOf(result));
-            }
-            else{
-                result = number2 - number1;
-                binding.textbox2.setText(String.valueOf(result));
-            }
-            if(count == 3){
-                count = 0;
-            }else{count++;}
+            result = number1 / number2;
+            binding.textbox2.setText(String.valueOf(result));
+        });
+        binding.button3.setOnClickListener(view ->{
+            int number1 = Integer.parseInt(binding.editText1.getText().toString());
+            int number2 = Integer.parseInt(binding.editText2.getText().toString());
+            binding.textbox1.setText("+");
+            result = number1 + number2;
+            binding.textbox2.setText(String.valueOf(result));
+        });
+        binding.button4.setOnClickListener(view ->{
+            int number1 = Integer.parseInt(binding.editText1.getText().toString());
+            int number2 = Integer.parseInt(binding.editText2.getText().toString());
+            binding.textbox1.setText("-");
+            result = number1 - number2;
+            binding.textbox2.setText(String.valueOf(result));
         });
         binding.savebutton.setOnClickListener(view -> {
             var text = binding.textbox2.getText().toString();
