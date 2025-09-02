@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 binding.textbox2.setText(String.valueOf(result));
             }
             else if(count == 1){
-                if (number2 == 0) {
+                if (number1 == 0) {
                     binding.textbox2.setText("エラー");
                 }else{result = number2 / number1;
                     binding.textbox2.setText(String.valueOf(result));
@@ -61,5 +61,11 @@ public class MainActivity extends AppCompatActivity {
             var text = binding.textbox2.getText().toString();
             prefDataStore.setString("name",text);
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        prefDataStore.getString("name").ifPresent(name -> binding.textbox2.setText(name));
     }
 }
