@@ -14,6 +14,7 @@ import jp.ac.meijou.android.s241205011.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
+    private PrefDataStore prefDataStore;
     private int count = 0; // count をフィールド変数として宣言し、初期値を0に設定
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        prefDataStore = PrefDataStore.getInstance(this);
         String[] hello = {"＊","/","＋","-"};
         binding.button.setOnClickListener(view ->{
             int number1 = Integer.parseInt(binding.editText1.getText().toString());
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             else if(count == 1){
                 if (number2 == 0) {
                     binding.textbox2.setText("エラー");
-                }else{result = number1 / number2;
+                }else{result = number2 / number1;
                     binding.textbox2.setText(String.valueOf(result));
                 }
             }
@@ -48,12 +50,16 @@ public class MainActivity extends AppCompatActivity {
                 binding.textbox2.setText(String.valueOf(result));
             }
             else{
-                result = number1 - number2;
+                result = number2 - number1;
                 binding.textbox2.setText(String.valueOf(result));
             }
             if(count == 3){
                 count = 0;
             }else{count++;}
+        });
+        binding.savebutton.setOnClickListener(view -> {
+            var text = binding.textbox2.getText().toString();
+            prefDataStore.setString("name",text);
         });
     }
 }
