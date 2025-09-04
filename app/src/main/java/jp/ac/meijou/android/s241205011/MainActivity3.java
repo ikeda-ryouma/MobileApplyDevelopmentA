@@ -18,6 +18,8 @@ public class MainActivity3 extends AppCompatActivity {
     private int[] color = new int[100];
     private float in_number = 0;
     private int count = 0;
+    private String operator = "";
+    private String[] operator_list = {"÷", "×", "-", "+"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,116 +33,116 @@ public class MainActivity3 extends AppCompatActivity {
             return insets;
         });
         binding.button0.setOnClickListener(v -> {
-            if (in_number == 0 && count != 0) {
-                if (color[count-1] == 1){
-                    binding.textView1.setText("エラー");
-                    return;
-                }
-            }
-            in_number = in_number*10;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(0);
         });
         binding.button1.setOnClickListener(v -> {
-            in_number = in_number*10+1;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(1);
         });
         binding.button2.setOnClickListener(v -> {
-            in_number = in_number*10+2;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(2);
         });
         binding.button3.setOnClickListener(v -> {
-            in_number = in_number*10+3;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(3);
         });
         binding.button4.setOnClickListener(v -> {
-            in_number = in_number*10+4;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(4);
         });
         binding.button5.setOnClickListener(v -> {
-            in_number = in_number*10+5;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(5);
         });
         binding.button6.setOnClickListener(v -> {
-            in_number = in_number*10+6;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(6);
         });
         binding.button7.setOnClickListener(v -> {
-            in_number = in_number*10+7;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(7);
         });
         binding.button8.setOnClickListener(v -> {
-            in_number = in_number*10+8;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(8);
         });
         binding.button9.setOnClickListener(v -> {
-            in_number = in_number*10+9;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleNumberInput(9);
         });
         binding.button10.setOnClickListener(v -> {
-            number[count] = in_number;
-            color[count] = 1;
-            count++;
-            in_number = 0;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleOperatorInput(1);
         });
         binding.button11.setOnClickListener(v -> {
-            number[count] = in_number;
-            color[count] = 2;
-            count++;
-            in_number = 0;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleOperatorInput(2);
         });
         binding.button12.setOnClickListener(v -> {
-            number[count] = in_number;
-            color[count] = 3;
-            count++;
-            in_number = 0;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleOperatorInput(3);
         });
         binding.button13.setOnClickListener(v -> {
-            number[count] = in_number;
-            color[count] = 4;
-            count++;
-            in_number = 0;
-            binding.textView1.setText(String.valueOf(in_number));
+            handleOperatorInput(4);
         });
         binding.button14.setOnClickListener(v -> {
             number[count] = in_number;
-            in_number = number[0];
-            for (int i = 0; i < number.length-1; i++) {
+            for (int i = 0; i < count; i++) {
                 if (color[i] == 1) {
-                    in_number = in_number/number[i+1];
+                    number[i+1] = number[i] / number[i+1];
+                    number[i] = 0;
+                    if (i == 0){
+                        color[i] = 4;
+                    }else color[i] = color[i-1];
+                } else if (color[i] == 2) {
+                    number[i+1] = number[i] * number[i+1];
+                    number[i] = 0;
+                    if (i == 0){
+                        color[i] = 4;
+                    }else color[i] = color[i-1];
                 }
-                if (color[i] == 2) {
-                    in_number = in_number*number[i+1];
-                }
+            }
+            float result = number[0];
+            for (int i = 0; i < count; i++) {
                 if (color[i] == 3) {
-                    in_number = in_number-number[i+1];
+                    result -= number[i+1];
+                } else if (color[i] == 4) {
+                    result += number[i+1];
                 }
-                if (color[i] == 4) {
-                    in_number = in_number+number[i+1];
-                }
             }
-            count = 0;
-            for (int i = 0; i < number.length; i++) {
-                number[i] = 0;
-            }
-            for (int i = 0; i < color.length; i++) {
-                color[i] = 0;
-            }
-            binding.textView1.setText(String.valueOf(in_number));
+            clearArrays();
+            binding.textView1.setText(String.valueOf(result));
+            in_number = result;
+            operator = String.valueOf(result);
+            binding.textView2.setText(operator);
         });
         binding.button15.setOnClickListener(v -> {
-            in_number = 0;
-            count = 0;
-            for (int i = 0; i < number.length; i++) {
-                number[i] = 0;
-            }
-            for (int i = 0; i < color.length; i++) {
-                color[i] = 0;
-            }
+            clearArrays();
             binding.textView1.setText(String.valueOf(in_number));
         });
 
+    }
+
+    private void handleNumberInput(int digit) {
+        if (in_number == 0 && count != 0 && digit == 0) {
+            if (color[count-1] == 1){ // 割り算の場合のエラー処理
+                binding.textView1.setText("エラー");
+                return;
+            }
+        }
+        operator = operator + String.valueOf(digit);
+        in_number = in_number * 10 + digit;
+        binding.textView1.setText(String.valueOf(in_number));
+        binding.textView2.setText(String.valueOf(operator));
+    }
+
+    private void handleOperatorInput(int operatorColor) {
+        number[count] = in_number;
+        color[count] = operatorColor;
+        count++;
+        in_number = 0;
+        operator = operator + operator_list[operatorColor-1];
+        binding.textView1.setText(String.valueOf(in_number));
+        binding.textView2.setText(String.valueOf(operator));
+    }
+
+    private void clearArrays() {
+        for (int i = 0; i < 100; i++) {
+            number[i] = 0;
+            color[i] = 0;
+        }
+        in_number = 0;
+        count = 0;
+        operator = "";
+        binding.textView2.setText(String.valueOf(operator));
     }
 }
