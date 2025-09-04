@@ -20,7 +20,7 @@ import jp.ac.meijou.android.s241205011.databinding.ActivityMainBinding;
 public class MainActivity2 extends AppCompatActivity {
     private ActivityMain2Binding binding;
     private PrefDataStore prefDataStore;
-    private float number[];
+    private float number[] = new float[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,14 @@ public class MainActivity2 extends AppCompatActivity {
         });
         binding.button.setOnClickListener(v -> {
             var intent = new Intent(this, MainActivity3.class);
+            startActivity(intent);
+        });
+        binding.button8.setOnClickListener(v -> {
+            var intent = new Intent(this, MainActivity5.class);
+            startActivity(intent);
+        });
+        binding.button9.setOnClickListener(v -> {
+            var intent = new Intent(this, MainActivity6.class);
             startActivity(intent);
         });
         binding.button3.setOnClickListener(v -> {
